@@ -10,23 +10,49 @@
                     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
             http://www.springframework.org/schema/aop
             http://www.springframework.org/schema/aop/spring-aop.xsd">
-    <context:component-scan base-package="com.bizdash" />
-    
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
-        <property name="prefix" value="/WEB-INF/jsp/" /> 
-        <property name="suffix" value=".jsp" /> 
+
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="configLocation" >
+            <value>classpath:hibernate.cfg.xml</value>
+        </property>
+
+        <property name="packagesToScan">
+            <list>
+                <value>com.bizdash.entities</value>
+            </list>
+        </property>
     </bean>
-    
-    <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
-    <bean class="org.springframework.web.servlet.resource.ResourceHttpRequestHandler" />
-    
-    <mvc:resources mapping="/resources/**" location="/resources/" />
-    
-    <mvc:annotation-driven />
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+     
+    <bean id="transactionManager"  class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+  
+    <bean id="shoppingCartDao" class="com.bizdash.dao.impl.ShoppingCartDaoImpl"></bean>
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <context:component-scan base-package="com.bizdash" />
+    <mvc:annotation-driven conversion-service="conversionService" />
+    <tx:annotation-driven />
+
     <mvc:default-servlet-handler />
-    
-    <aop:aspectj-autoproxy />
-    <aop:aspectj-autoproxy>
-    <aop:include name="Logs"/>
-    </aop:aspectj-autoproxy>
+
+
+    <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.bizdash.converter.IntegerToCategory" />
+            </set>
+        </property>
+    </bean>
+    <bean
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+  
 </beans>

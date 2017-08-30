@@ -42,6 +42,12 @@
           <li class="nav-item">
             <a class="nav-link" href="/BizDash/addBusiness">Dodaj Biznis</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/BizDash/addCategory">Dodaj Kategoriju</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/BizDash/addProduct">Dodaj Proizvod</a>
+          </li>
 <!--          <li class="nav-item">
             <a class="nav-link disabled" href="#">Disabled</a>
           </li>
